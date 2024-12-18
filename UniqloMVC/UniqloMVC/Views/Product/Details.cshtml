@@ -1,0 +1,275 @@
+﻿@model ProductDetailsVM
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var rating = Model.Ratings.Count > 0 ? Model.Ratings.Average() : 0;
+}
+
+<!-- End Offset Wrapper -->
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/2.jpg) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bradcaump__inner text-center">
+                        <h2 class="bradcaump-title">Product Details</h2>
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" asp-action="Index" asp-controller="Home">Home</a>
+                            <span class="brd-separetor">/</span>
+                            <span class="breadcrumb-item active">Product Details</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Product Details -->
+<section class="htc__product__details pt--120 pb--100 bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-6 col-sm-12">
+                <div class="product__details__container">
+                    <!-- Start Small images -->
+                    <ul class="nav product__small__images" role="tablist">
+                        <li role="presentation" class="pot-small-img">
+                            <a class="active" href="#img-tab" role="tab" data-bs-toggle="tab">
+                                <img width="120px" src="~/imgs/products/@Model.CoverImage" alt="small-image">
+                            </a>
+                        </li>
+                        @foreach (var item in Model.ImagesUrl ?? [])
+                        {
+                            <li role="presentation" class="pot-small-img">
+                                <a class="active" href="#img-tab" role="tab" data-bs-toggle="tab">
+                                    <img width="120px" src="~/imgs/products/@item" alt="small-image">
+                                </a>
+                            </li>
+                            
+                        }
+                    </ul>
+                    <!-- End Small images -->
+                    <div class="product__big__images">
+                        <div class="portfolio-full-image tab-content">
+                            <div role="tabpanel" class="tab-pane active" >
+                                <img src="~/imgs/products/@Model.CoverImage" alt="small-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6 col-sm-12 smt-30 xmt-30">
+                <div class="htc__product__details__inner">
+                    <div class="pro__detl__title">
+                        <h2>@Model.Name</h2>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-action="Rating" method="get">
+                                <input name="ProductId" value="@Model.ProductId" type="hidden" />
+                                <input name="rating" value="@ViewBag.Rating" type="number" min="1" max="5" />
+                                <button class="btn">Rate</button>
+                        </form>
+                        
+                    }
+                    <div class="pro__dtl__rating">
+                        <ul class="pro__rating">
+                            @for(int i = 0; i < Math.Ceiling(rating); i++)
+                            {
+                                <li><span class="ti-star"></span></li>
+                            }
+                            (@rating)
+                        </ul>
+                        <span class="rat__qun">(Based on @Model.Ratings.Count Ratings)</span>
+                    </div>
+                    <div class="pro__details">
+                        <p>@Model.Description </p>
+                    </div>
+                    <ul class="pro__dtl__prize">
+                        @if (Model.Discount > 0)
+                        {
+                            <li class="old__prize">$@Model.SellPrice</li>
+                            <li>$@(Model.SellPrice*(100-Model.Discount)/100)</li>
+
+                        }
+                        else
+                        {
+                                
+                            <li>$@Model.SellPrice</li>
+                        }
+                    </ul>
+                    @* <div class="pro__dtl__color">
+                        <h2 class="title__5">Choose Colour</h2>
+                        <ul class="pro__choose__color">
+                            <li class="red"><a href="#"><i class="zmdi zmdi-circle"></i></a></li>
+                            <li class="blue"><a href="#"><i class="zmdi zmdi-circle"></i></a></li>
+                            <li class="perpal"><a href="#"><i class="zmdi zmdi-circle"></i></a></li>
+                            <li class="yellow"><a href="#"><i class="zmdi zmdi-circle"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="pro__dtl__size">
+                        <h2 class="title__5">Size</h2>
+                        <ul class="pro__choose__size">
+                            <li><a href="#">xl</a></li>
+                            <li><a href="#">m</a></li>
+                            <li><a href="#">ml</a></li>
+                            <li><a href="#">lm</a></li>
+                            <li><a href="#">xxl</a></li>
+                        </ul>
+                    </div>
+                    <div class="product-action-wrap">
+                        <div class="prodict-statas"><span>Quantity :</span></div>
+                        <div class="product-quantity">
+                            <form id='myform' method='POST' action='#'>
+                                <div class="product-quantity">
+                                    <div class="cart-plus-minus">
+                                        <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <ul class="pro__dtl__btn">
+                        <li class="buy__now__btn"><a href="#">buy now</a></li>
+                        <li><a href="#"><span class="ti-heart"></span></a></li>
+                        <li><a href="#"><span class="ti-email"></span></a></li>
+                    </ul>
+                    <div class="pro__social__share">
+                        <h2>Share :</h2>
+                        <ul class="pro__soaial__link">
+                            <li><a href="https://twitter.com/devitemsllc" target="_blank"><i class="zmdi zmdi-twitter"></i></a></li>
+                            <li><a href="https://www.instagram.com/devitems/" target="_blank"><i class="zmdi zmdi-instagram"></i></a></li>
+                            <li><a href="https://www.facebook.com/devitems/?ref=bookmarks" target="_blank"><i class="zmdi zmdi-facebook"></i></a></li>
+                            <li><a href="https://plus.google.com/" target="_blank"><i class="zmdi zmdi-google-plus"></i></a></li>
+                        </ul>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Product Details -->
+<!-- Start Product tab -->
+<section class="htc__product__details__tab bg__white pb--120">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <ul class="nav product__deatils__tab mb--60" role="tablist">
+                    <li role="presentation" class="active">
+                        <a class="active" href="#description" role="tab" data-bs-toggle="tab">Description</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#sheet" role="tab" data-bs-toggle="tab">Data sheet</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#reviews" role="tab" data-bs-toggle="tab">Reviews</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product__details__tab__content">
+                    <!-- Start Single Content -->
+                    <div role="tabpanel" id="description" class="product__tab__content active">
+                        <div class="product__description__wrap">
+                            <div class="product__desc">
+                                <h2 class="title__6">Details</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis noexercit ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id.</p>
+                            </div>
+                            <div class="pro__feature">
+                                <h2 class="title__6">Features</h2>
+                                <ul class="feature__list">
+                                    <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Duis aute irure dolor in reprehenderit in voluptate velit esse</a></li>
+                                    <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Irure dolor in reprehenderit in voluptate velit esse</a></li>
+                                    <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Sed do eiusmod tempor incididunt ut labore et </a></li>
+                                    <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Nisi ut aliquip ex ea commodo consequat.</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Single Content -->
+                    <!-- Start Single Content -->
+                    <div role="tabpanel" id="sheet" class="product__tab__content">
+                        <div class="pro__feature">
+                            <h2 class="title__6">Data sheet</h2>
+                            <ul class="feature__list">
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Duis aute irure dolor in reprehenderit in voluptate velit esse</a></li>
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Irure dolor in reprehenderit in voluptate velit esse</a></li>
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Irure dolor in reprehenderit in voluptate velit esse</a></li>
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Sed do eiusmod tempor incididunt ut labore et </a></li>
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Sed do eiusmod tempor incididunt ut labore et </a></li>
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Nisi ut aliquip ex ea commodo consequat.</a></li>
+                                <li><a href="#"><i class="zmdi zmdi-play-circle"></i>Nisi ut aliquip ex ea commodo consequat.</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- End Single Content -->
+                    <!-- Start Single Content -->
+                    <div role="tabpanel" id="reviews" class="product__tab__content">
+                        
+                        <div class="review__address__inner">
+                            <!-- Start Single Review -->
+                                @if (Model.Comments != null)
+                                {
+                                    @foreach (var item in Model.Comments)
+                                    {
+                                    <div class="review__item">
+                                        <div class="review__name">
+                                            @if (item.User?.UserName == null)
+                                            {
+                                                <h4>4t3t</h4>
+                                            }
+                                            <h4>@item.User?.UserName</h4>
+                                            </div>
+                                            <div class="review__date">
+                                                <span>@item.CreatedTime.ToString("dd MMM, yyyy 'at' h:mm tt")</span>
+                                            </div>
+                                            <div class="review__comment">
+                                                <p>@item.Comment</p>
+                                            </div>
+                                        </div>
+
+                                    }
+                                }
+
+                        </div>
+                        <!-- Start RAting Area -->
+                        <!-- End RAting Area -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="rating__wrap">
+                                <h2 class="rating-title">Write  A review</h2>
+                            </div>
+                            <div class="review__box">
+                                <form asp-action="Comment" method="get">
+                                    <div class="single-review-form">
+                                        <div class="review-box message">
+                                            <input name="ProductId" value="@Model.ProductId" type="hidden"/>
+                                            <textarea name="comment" placeholder="Write your review"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="review-btn">
+                                        <button>Confirm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                    <!-- End Single Content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Product tab -->
+
+@section script{
+    <script>
+        $(".product__small__images img").click(function () {
+            $(".product__big__images img").attr("src",$(this).attr("src"))
+        })
+    </script>
+}
+

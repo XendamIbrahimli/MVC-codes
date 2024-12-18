@@ -1,29 +1,38 @@
-﻿@{
+﻿
+@model HomeVM
+
+@{
     Layout = "_Layout";
     ViewData["Title"] = "Main Page";
 
+}
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 <!-- Start Slider Area -->
         <div class="slider__container slider--four">
             <div class="slider__activation__wrap owl-carousel owl-theme">
                 <!-- Start Single Slide -->
-                <div class="slide slider__fixed--height" style="background: rgba(0, 0, 0, 0) url(images/slider/bg/3.jpg) no-repeat scroll center center / cover ;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-9 offset-sm-3 col-md-6 offset-md-6 col-lg-5 offset-lg-7">
-                                <div class="slider__content">
-                                    <div class="slider__inner">
-                                        <h1>Awesome Product Collection</h1>
-                                        <h4>In 2022</h4>
-                                        <div class="slider__btn">
-                                            <a class="htc__btn" href="cart.html">shop now</a>
+                @foreach (var item in Model.Sliders)
+                 {
+                     <div class="slide slider__fixed--height" style="background: rgba(0, 0, 0, 0) url(../imgs/sliders/@item.ImageUrl) no-repeat scroll center center / cover ;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-9 offset-sm-3 col-md-6 offset-md-6 col-lg-5 offset-lg-7">
+                                    <div class="slider__content">
+                                        <div class="slider__inner">
+                                            <h1>@item.Title</h1>
+                                            <h4>@item.Subtitle</h4>
+                                            <div class="slider__btn">
+                                                <a class="htc__btn" href="cart.html">shop now</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                 }
                 <!-- End Single Slide -->
             </div>
         </div>
@@ -132,251 +141,82 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="popular__product__container product__list clearfix">
+                                    @foreach (var item in Model.Products)
+                            {
                                     <!-- Start Single Product -->
                                     <div class="single__pro cat--2 cat--4">
                                         <div class="product">
                                             <div class="product__inner">
                                                 <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/1.jpg" alt="product images">
+                                                    <a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">
+                                                        <img src="~/imgs/products/@item.ImageUrl" alt="product images">
                                                     </a>
                                                 </div>
                                                 <div class="popular__product__hover__info">
                                                     <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
+                                                        <li prop-id="@item.Id" style="color:red;cursor:pointer" class="add-cart"><span class="ti-shopping-cart"></span></li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
+                                            <h2><a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">@item.Name</a></h2>
+                                                @if(item.IsInStock)
+                                                {
+                                                    if (item.Discount > 0)
+                                                    {
+                                                        <del>@item.Price</del>
+                                                        <span class="text-danger">$@(item.Price-item.Price*item.Discount/100)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="popular__pro__prize">@item.Price</span> 
+                                                    }
+                                                }else
+                                                {
+                                                    <span class="text-danger">Stock will refresh</span>
+                                                }
+                                        </div>
                                         </div>
                                     </div>
                                     <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--3">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/2.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--1 cat--4">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/3.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--2 cat--3">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/4.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--1 cat--4">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/6.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--2 cat--3">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/7.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--1 cat--4">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/8.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--2">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/9.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--1 cat--4 hidden-md hidden-sm">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/10.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
-                                    <!-- Start Single Product -->
-                                    <div class="single__pro cat--3 hidden-md hidden-sm">
-                                        <div class="product">
-                                            <div class="product__inner">
-                                                <div class="pro__thumb">
-                                                    <a href="#">
-                                                        <img src="~/assets/images/popular-pro-2/5.jpg" alt="product images">
-                                                    </a>
-                                                </div>
-                                                <div class="popular__product__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a title="Add To Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
-                                                        <li><a data-bs-toggle="modal" data-bs-target="#productModal" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                        <li><a title="Add To Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="product__details">
-                                                <h2><a href="product-details.html">Simple Black Clock</a></h2>
-                                                <span class="popular__pro__prize">$16.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Single Product -->
+                                
+                            }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            @section script{
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script>
+                    $('.add-cart').click(function () {
+                        fetch('/Product/AddBasket/' + $(this).attr('prop-id'))
+                            .then(x => {
+                                if (x.ok) {
+                            Command: toastr["success"]("Product was added to the Basket")
+
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-top-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "3000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
+                                }
+                            })
+                    })
+                </script>
+            }
            
 
